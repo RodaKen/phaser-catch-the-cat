@@ -141,5 +141,9 @@ export default {
     catDefaultDirection: 5,
     catStepLength: 20,
     frameRate: 15,
-    translations: {},
+    translations: {
+        '重置': 'リセット',
+        '回退': '1つ戻す',
+        '无路可退！！！': ''
+    },
 };

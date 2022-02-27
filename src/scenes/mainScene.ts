@@ -18,8 +18,8 @@ declare type NeighbourData = {
 }
 
 declare type RecordCoord = {
-    cat: {i:number, j:number}[],
-    wall: {i:number, j:number}[],
+    cat: { i: number, j: number }[],
+    wall: { i: number, j: number }[],
 }
 
 enum GameState {
@@ -100,10 +100,10 @@ export default class MainScene extends Phaser.Scene {
             case GameState.PLAYING:
                 break;
             case GameState.LOSE:
-                this.setStatusText(_("猫已经跑到地图边缘了，你输了"));
+                this.setStatusText(_("猫は逃げていった..."));
                 break;
             case GameState.WIN:
-                this.setStatusText(_("猫已经无路可走，你赢了"));
+                this.setStatusText(_("クリア！猫をつかまえた！"));
                 break;
             default:
                 return;
@@ -185,31 +185,31 @@ export default class MainScene extends Phaser.Scene {
         }
         let block = this.getBlock(i, j);
         if (!block) {
-            this.setStatusText(_("代码错误，当前位置不存在"));
+            this.setStatusText(_("エラー 石の範囲外です"));
             return false;
         }
         if (block.isWall) {
-            this.setStatusText(_("点击位置已经是墙了，禁止点击"));
+            this.setStatusText(_("すでに石が置かれています"));
             return false;
         }
         if (this.cat.i === i && this.cat.j === j) {
-            this.setStatusText(_("点击位置是猫当前位置，禁止点击"));
+            this.setStatusText(_("そこには石を置けません"));
             return false;
         }
         block.isWall = true;
         if (this.cat.isCaught()) {
-            this.setStatusText(_("猫已经无路可走，你赢了"));
+            this.setStatusText(_("クリア！猫を捕まえた！"));
             this.state = GameState.WIN;
             return false;
         }
 
-        this.recordCoord.cat.push({i: this.cat.i, j:this.cat.j});
+        this.recordCoord.cat.push({i: this.cat.i, j: this.cat.j});
         this.recordCoord.wall.push({i, j});
 
-        this.setStatusText(_("您点击了 ") + `(${i}, ${j})`);
+        this.setStatusText(_("石を置きました ") + `(${i}, ${j})`);
         let result = this.cat.step();
         if (!result) {
-            this.setStatusText(_("猫认输，你赢了！"));
+            this.setStatusText(_("クリア！猫はあきらめました"));
             this.state = GameState.WIN;
         }
         return true;
@@ -225,13 +225,13 @@ export default class MainScene extends Phaser.Scene {
             wall: []
         };
         this.state = GameState.PLAYING;
-        this.setStatusText(_("点击小圆点，围住小猫"));
+        this.setStatusText(_("猫に逃げられないように石を置いてください"));
     }
 
     undo() {
         if (this.recordCoord.cat.length) {
             if (this.state !== GameState.PLAYING) {
-                this.setStatusText(_("游戏已经结束，重新开局"));
+                this.setStatusText(_("ゲームオーバー"));
                 this.reset();
             } else {
                 const catCoord = this.recordCoord.cat.pop();
@@ -241,9 +241,10 @@ export default class MainScene extends Phaser.Scene {
                 this.getBlock(i, j).isWall = false;
             }
         } else {
-            this.setStatusText(_("无路可退！！！"));
+            this.setStatusText(_("戻せません"));
         }
     }
+
     private setStatusText(message: string) {
         this.statusBar.setText(message);
     }
