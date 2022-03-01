@@ -7,7 +7,7 @@ export default class CreditText extends Phaser.GameObjects.Text {
         this.setPosition(scene.game.canvas.width, scene.game.canvas.height);
         this.setOrigin(1, 1);
         let r = scene.r;
-        this.setFontSize(r * 0.8);
+        this.setFontSize(r * 0.4);
         this.setPadding(r, r, r, r);
         this.setText(scene.game.myConfig.credit);
     }

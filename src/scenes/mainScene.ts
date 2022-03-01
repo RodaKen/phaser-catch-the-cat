@@ -331,11 +331,16 @@ export default class MainScene extends Phaser.Scene {
     }
 
     private randomWall() {
-        for (let k = 0; k < 8; k++) {
-            let i = Math.floor(this.w * Math.random());
-            let j = Math.floor(this.h * Math.random());
-            if (i !== this.cat.i || j !== this.cat.j) {
-                this.getBlock(i, j).isWall = true;
+        const wallNumber = 11
+        for (let k = 0; k < wallNumber; k++) {
+            if (wallNumber >= this.w * this.h) throw new Error('wallNumber exceeds the area')
+            while (true) {
+                let i = Math.floor(this.w * Math.random());
+                let j = Math.floor(this.h * Math.random());
+                if ((i !== this.cat.i || j !== this.cat.j) && !this.getBlock(i, j).isWall) {
+                    this.getBlock(i, j).isWall = true;
+                    break;
+                }
             }
         }
     }
