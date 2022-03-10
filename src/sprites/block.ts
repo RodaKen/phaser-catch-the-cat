@@ -30,7 +30,7 @@ export default class Block extends Phaser.GameObjects.Arc {
     set isWall(value: boolean) {
         this._isWall = value;
         if (value) {
-            this.fillColor = 0x003366;
+            this.fillColor = 0xff3366;
         } else {
             this.fillColor = 0xb3d9ff;
         }
